@@ -17,9 +17,9 @@ VALUES
 	('Alicja', 'Nowak', 2050, '1992-04-02', 'sales'),
 	('Tatiana', 'Fredzel', 3500, '1991-08-08', 'engineer'),
 	('Boguslaw', 'Palec', 5000, '1982-10-10', 'manager'),
-	('Katarzyna', 'Madrala', 7000, '1956-09-08', 'director'),
+	('Katarzyna', 'Madrala', 7000, '1998-02-01', 'director'),
 	('Piotr', 'Truc', 5600, '1998-02-01', 'lawyer'),
-	('Milena', 'Gotowa', 6300, '1977-02-01', 'accountant');
+	('Milena', 'Gotowa', 6300, '1998-02-01', 'accountant');
     
 #3
 select * from employee ORDER BY last_name;
@@ -33,8 +33,8 @@ select * from employee where extract(year from curdate()) - extract( year from b
 #6
 select first_name, last_name, salary, birth_date, position, salary * 1.1 as salary_with_raise from employee where position = 'director';
 
-###7
-select * from employee ORDER BY birth_date desc limit 1;
+#7
+select * from employee where birth_date = (select birth_date from employee ORDER BY birth_date desc limit 1);
 
 #8
 drop table employee;
@@ -93,11 +93,13 @@ VALUES
     ('Boguslawa', 'Kachel', 5, 2);
     
 #13
-select employee.first_name, employee.last_name, 
-position.name, position.description, position.salary, 
-address.zip_code, address.street_with_number_house, address.city 
-from employee join position join address 
-on employee.address_id = address.id and employee.position_id = position.id;
+select 
+e.first_name, e.last_name, 
+p.name, p.description, p.salary, 
+a.zip_code, a.street_with_number_house, a.city 
+from employee e
+JOIN position p ON e.position_id = p.id
+JOIN address a ON e.address_id = a.id;
 
 #14
 
